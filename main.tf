@@ -6,8 +6,8 @@ provider "aws" {
 
 # Define a Virtual Private Cloud (VPC)
 resource "aws_vpc" "main_vpc" {
-  cidr_block = var.vpc_cidr
-  enable_dns_support = true
+  cidr_block           = var.vpc_cidr
+  enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
@@ -69,15 +69,15 @@ resource "aws_security_group" "web_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   # Add other security rules as needed, e.g., SSH, HTTPS, etc.
 }
 
 # Define an EC2 instance for WordPress
 resource "aws_instance" "wordpress_instance" {
-  ami           = var.instance_ami
-  instance_type = var.instance_type
-  subnet_id     = aws_subnet.main_subnet.id
+  ami                = var.instance_ami
+  instance_type      = var.instance_type
+  subnet_id          = aws_subnet.main_subnet.id
   security_group_ids = [aws_security_group.web_sg.id]
 
   # Other configurations such as SSH key, EIP, tags, etc.
@@ -85,13 +85,13 @@ resource "aws_instance" "wordpress_instance" {
 
 # Define an RDS database instance for WordPress
 resource "aws_db_instance" "wordpress_db" {
-  allocated_storage    = var.db_allocated_storage
-  engine               = var.db_engine
-  engine_version       = var.db_engine_version
-  instance_class       = var.db_instance_class
-  name                 = var.db_name
-  username             = var.db_username
-  password             = var.db_password
+  allocated_storage   = var.db_allocated_storage
+  engine              = var.db_engine
+  engine_version      = var.db_engine_version
+  instance_class      = var.db_instance_class
+  name                = var.db_name
+  username            = var.db_username
+  password            = var.db_password
   publicly_accessible = var.db_publicly_accessible
 
   # Other configurations such as database parameters, tags, etc.
@@ -101,7 +101,7 @@ resource "aws_db_instance" "wordpress_db" {
 resource "aws_s3_bucket" "media_bucket" {
   bucket = var.s3_bucket_name
   acl    = var.s3_bucket_acl
-  
+
   # Other configurations such as access logging, versioning, encryption, etc.
 }
 
@@ -119,11 +119,11 @@ resource "aws_elasticache_cluster" "cache_cluster" {
 
 # Define a backup plan for EC2 instance
 resource "aws_backup_plan" "ec2_backup_plan" {
-  name             = var.backup_plan_name
+  name = var.backup_plan_name
   rule {
-    rule_name           = var.backup_rule_name
-    target_vault_name   = var.backup_vault_name
-    schedule            = var.backup_schedule
+    rule_name         = var.backup_rule_name
+    target_vault_name = var.backup_vault_name
+    schedule          = var.backup_schedule
     lifecycle {
       delete_after_days = var.backup_delete_after_days
     }
