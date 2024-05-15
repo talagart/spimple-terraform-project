@@ -1,5 +1,3 @@
-# main.tf
-
 provider "aws" {
   region = var.aws_region
 }
@@ -62,7 +60,6 @@ resource "aws_security_group" "web_sg" {
   name        = var.security_group_name
   description = "Security group for web servers"
 
-  # Security rules
   ingress {
     from_port   = 80
     to_port     = 80
@@ -70,7 +67,12 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   
-  # Add other security rules as needed, e.g., SSH, HTTPS, etc.
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 # Define an EC2 instance for WordPress
@@ -80,6 +82,8 @@ resource "aws_instance" "wordpress_instance" {
   subnet_id              = aws_subnet.main_subnet.id
   security_groups        = [aws_security_group.web_sg.name]
   associate_public_ip_address = var.enable_public_ip
+  depends_on             = [aws_security_group.web_sg]
+
   tags = {
     Name = "wordpress_instance"
   }
@@ -101,9 +105,17 @@ resource "aws_db_instance" "wordpress_db" {
   }
 }
 
-# Define an S3 bucket for storing media files
-resource "aws_s3_bucket_acl" "media_bucket" {
+# Define an S3 bucket for storing media files with ACL
+resource "aws_s3_bucket" "media_bucket" {
   bucket = var.s3_bucket_name
+
+  tags = {
+    Name = "media_bucket"
+  }
+}
+
+resource "aws_s3_bucket_acl" "media_bucket_acl" {
+  bucket = aws_s3_bucket.media_bucket.id
   acl    = var.s3_bucket_acl
 }
 
@@ -116,15 +128,27 @@ resource "aws_elasticache_cluster" "cache_cluster" {
   parameter_group_name = var.cache_parameter_group
   port                 = var.cache_port
 
-  # Other configurations such as security group, tags, etc.
+  tags = {
+    Name = "cache_cluster"
+  }
+}
+
+# Define a backup vault
+resource "aws_backup_vault" "backup_vault" {
+  name = var.backup_vault_name
+
+  tags = {
+    Name = "backup_vault"
+  }
 }
 
 # Define a backup plan for EC2 instance
 resource "aws_backup_plan" "ec2_backup_plan" {
   name             = var.backup_plan_name
+
   rule {
     rule_name           = var.backup_rule_name
-    target_vault_name   = var.backup_vault_name
+    target_vault_name   = aws_backup_vault.backup_vault.name
     schedule            = var.backup_schedule
   }
 }
@@ -147,12 +171,13 @@ output "db_endpoint" {
 }
 
 output "s3_bucket_arn" {
-  value = aws_s3_bucket_acl.media_bucket.acl
+  value = aws_s3_bucket.media_bucket.arn
 }
 
 output "cache_cluster_address" {
-  value = aws_elasticache_cluster.cache_cluster.cluster_address
+  value = aws_elasticache_cluster.cache_cluster.cache_nodes.0.address
 }
 
-
-
+output "backup_vault_arn" {
+  value = aws_backup_vault.backup_vault.arn
+}
