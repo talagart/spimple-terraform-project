@@ -81,9 +81,7 @@ resource "aws_instance" "wordpress_instance" {
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.main_subnet.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
-  security_groups        = [aws_security_group.web_sg.name]
   associate_public_ip_address = var.enable_public_ip
-  depends_on             = [aws_security_group.web_sg]
 
   tags = {
     Name = "wordpress_instance"
