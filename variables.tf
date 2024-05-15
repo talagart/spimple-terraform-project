@@ -72,7 +72,7 @@ variable "db_engine" {
 variable "db_engine_version" {
   description = "The database engine version"
   type        = string
-  default     = "5.7.34"  # Kompatybilna wersja
+  default     = "8.0.35"  # Kompatybilna wersja
 }
 
 # DB Name
@@ -219,7 +219,7 @@ variable "db_allocated_storage" {
 variable "db_instance_class" {
   description = "The instance class for the RDS database"
   type        = string
-  default     = "db.t2.micro"  # AWS Free Tier-eligible
+  default     = "db.t3.micro"  # AWS Free Tier-eligible
 }
 
 # Route Table name

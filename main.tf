@@ -80,6 +80,7 @@ resource "aws_instance" "wordpress_instance" {
   ami                    = var.instance_ami
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.main_subnet.id
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
   security_groups        = [aws_security_group.web_sg.name]
   associate_public_ip_address = var.enable_public_ip
   depends_on             = [aws_security_group.web_sg]
@@ -114,9 +115,18 @@ resource "aws_s3_bucket" "media_bucket" {
   }
 }
 
+# Resource to avoid error "AccessControlListNotSupported: The bucket does not allow ACLs"
+resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
+  bucket = aws_s3_bucket.media_bucket.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket_acl" "media_bucket_acl" {
   bucket = aws_s3_bucket.media_bucket.id
   acl    = var.s3_bucket_acl
+  depends_on = [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership]
 }
 
 # Define an ElastiCache cluster for caching
