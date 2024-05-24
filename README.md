@@ -1,38 +1,82 @@
-# AWS Infrastructure for E-commerce Store
+# Simple Terraform Project
 
-This repository contains Terraform code to quickly deploy AWS infrastructure for an e-commerce store. Please note that this Terraform code only provisions the basic infrastructure, and further configuration will be necessary to set up the actual e-commerce application.
+## Overview
+This project automates the deployment of cloud infrastructure using Terraform. It includes the setup of a Virtual Private Cloud (VPC), subnets, security groups, and EC2 instances on AWS.
 
-## Usage
+## Table of Contents
+1. [Problem](#problem)
+2. [Solution](#solution)
+3. [Impact](#impact)
+4. [Getting Started](#getting-started)
+   - [Requirements](#requirements)
+   - [Setup](#setup)
+5. [Implementation](#implementation)
+   - [Terraform Configuration](#terraform-configuration)
+6. [Cleanup](#cleanup)
+7. [Repository](#repository)
+8. [Contributing](#contributing)
+9. [License](#license)
 
-1. **Install Terraform**: Ensure you have Terraform installed on your local machine.
-2. **Clone the Repository**: Clone this repository to your local machine.
-3. **Configure Variables**: Update variables in `variables.tf` according to your requirements.
-4. **Initialize Terraform**: Run `terraform init` to initialize Terraform and download necessary plugins.
-5. **Review and Apply Changes**: Run `terraform plan` to review the execution plan, then run `terraform apply` to apply the changes and provision the infrastructure.
-6. **Access Resources**: Once the deployment is complete, further configuration will be needed to set up the e-commerce application using the provisioned resources.
+## Problem
+Managing cloud infrastructure manually can be time-consuming and error-prone. As the complexity of infrastructure grows, maintaining consistency and repeatability becomes a significant challenge.
 
-## Examples
+## Solution
+I developed a Terraform project to automate the deployment of cloud infrastructure. Terraform allows for infrastructure as code, enabling version control, collaboration, and automation. The project includes setting up a VPC, subnets, security groups, and EC2 instances.
 
-Here are some example use cases for this infrastructure:
+## Impact
+This project demonstrates the ability to efficiently manage cloud resources using infrastructure as code, reducing manual errors and improving deployment speed. It showcases skills in Terraform, AWS, and automation.
 
-- **VPC (Virtual Private Cloud)**: Provides isolated networking environment for the e-commerce application.
-- **EC2 Instance for WordPress**: A server instance to host the WordPress platform for building the e-commerce website. The provided AMI has WordPress pre-installed. More information about the AMI and its configuration can be found [here](https://docs.bitnami.com/aws/apps/wordpress-pro/).
-- **RDS Database**: Managed relational database service for storing e-commerce data securely.
-- **S3 Bucket for Media Files**: Storage solution for storing media files such as product images.
-- **ElastiCache Cluster for Caching**: Provides caching capabilities to improve performance of the e-commerce application.
-- **Backup Configurations**: Configures backup plans for EC2 instance and RDS database to ensure data durability.
+## Getting Started
 
-## Security and Practicality Considerations
+### Requirements
+- AWS Account
+- Terraform installed (version >= 0.12)
 
-- **Security Groups**: Ensure that security group configurations are tailored to your specific security requirements.
-- **Sensitive Information**: Avoid storing sensitive information like passwords directly in Terraform files. Instead, use secure solutions like AWS Secrets Manager.
-- **Tagging**: Make sure to tag all resources appropriately for better management and tracking.
-- **Free Tier Eligibility**: The variables have been chosen with AWS Free Tier eligibility in mind, so you can test the code within the Free Tier limits.
+### Setup
+
+1. **Clone the Repository**
+    ```sh
+    git clone https://github.com/talagart/spimple-terraform-project.git
+    cd spimple-terraform-project
+    ```
+
+2. **Initialize Terraform**
+    ```sh
+    terraform init
+    ```
+
+3. **Configure AWS Credentials**
+    Ensure your AWS credentials are configured. You can use the AWS CLI to configure your credentials:
+    ```sh
+    aws configure
+    ```
+
+## Implementation
+
+### Terraform Configuration
+
+the main Terraform configuration file (`main.tf`):
+
+### Deploy
+Run the following command to apply the Terraform configuration and deploy the infrastructure:
+
+```sh
+terraform apply
+```
+### Clean up
+To remove the infrastructure and avoid any charges, run:
+
+```sh
+terraform destroy
+```
+### Cleanup
+To avoid any unexpected charges, make sure to delete all the AWS resources created during this project:
+
+Run ```terraform destroy``` to remove the infrastructure.
 
 ## Contributing
-
-Contributions are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
+Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-This project is licensed under the [MIT License](LICENSE).
