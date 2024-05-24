@@ -98,6 +98,7 @@ resource "aws_db_instance" "wordpress_db" {
   username            = var.db_username
   password            = var.db_password
   publicly_accessible = var.db_publicly_accessible
+  skip_final_snapshot = true
 
   tags = {
     Name = "wordpress_db"
