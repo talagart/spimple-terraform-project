@@ -1,7 +1,7 @@
 # Simple Terraform Project
 
 ## Overview
-This project automates the deployment of cloud infrastructure using Terraform. It includes the setup of a Virtual Private Cloud (VPC), subnets, security groups, and EC2 instances on AWS.
+This project automates the deployment of cloud infrastructure using Terraform. It includes the setup of a Virtual Private Cloud (VPC), subnets, security groups, EC2 instances with preinstalled WordPress, an RDS database, S3 bucket for media, ElastiCache for caching, and a backup plan on AWS.
 
 ## Table of Contents
 1. [Problem](#problem)
@@ -23,7 +23,7 @@ This project automates the deployment of cloud infrastructure using Terraform. I
 Managing cloud infrastructure manually can be time-consuming and error-prone. As the complexity of infrastructure grows, maintaining consistency and repeatability becomes a significant challenge.
 
 ## Solution
-I developed a Terraform project to automate the deployment of cloud infrastructure. Terraform allows for infrastructure as code, enabling version control, collaboration, and automation. The project includes setting up a VPC, subnets, security groups, and EC2 instances.
+I developed a Terraform project to automate the deployment of cloud infrastructure. Terraform allows for infrastructure as code, enabling version control, collaboration, and automation. The project includes setting up a VPC, subnets, security groups, EC2 instances with preinstalled WordPress, an RDS database, S3 bucket for media, ElastiCache for caching, and a backup plan.
 
 ## Impact
 This project demonstrates the ability to efficiently manage cloud resources using infrastructure as code, reducing manual errors and improving deployment speed. It showcases skills in Terraform, AWS, and automation.
@@ -89,10 +89,14 @@ Terraform builds the infrastructure based on the configuration defined in the `m
 
 - **VPC (Virtual Private Cloud)**: Provides an isolated network environment within the AWS cloud where you can launch AWS resources.
 - **Subnets**: Segment the VPC into smaller, more manageable sections. Each subnet is mapped to a specific availability zone to ensure high availability.
-- **Security Groups**: Act as virtual firewalls for controlling inbound and outbound traffic to AWS resources. This project creates a security group that allows SSH access.
-- **EC2 Instances**: Virtual servers running in the cloud. This project deploys EC2 instances within the created subnets, allowing for scalable and on-demand computing capacity.
-
-These resources are essential for building a basic and secure cloud infrastructure on AWS.
+- **Internet Gateway**: Allows instances within the VPC to connect to the internet.
+- **Route Table**: Directs internet traffic to the instances in the public subnet via the Internet Gateway.
+- **Security Groups**: Act as virtual firewalls for controlling inbound and outbound traffic to AWS resources. This project creates a security group that allows SSH and HTTP access.
+- **EC2 Instances**: Virtual servers running in the cloud. This project deploys EC2 instances within the created subnets, with a pre-installed WordPress application. The selected Amazon Machine Image (AMI) includes WordPress and its configuration can be found [here](https://docs.bitnami.com/aws/apps/wordpress-pro/).
+- **RDS Database Instance**: Provides a managed relational database for the WordPress application. This project creates an RDS instance using MySQL.
+- **S3 Bucket**: Used for storing media files. The bucket has ACLs configured for appropriate access control.
+- **ElastiCache Cluster**: Provides a caching layer to improve the performance of the WordPress application. This project uses Redis as the caching engine.
+- **Backup Vault**: Used for managing backups of the infrastructure. This project creates a backup vault and a backup plan for the EC2 instances.
 
 ### Validation and Planning
 
@@ -136,3 +140,4 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ### License
 This project is licensed under the MIT License. See the LICENSE file for details.
+
